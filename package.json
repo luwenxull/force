@@ -2,7 +2,7 @@
   "name": "particle",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/luwenxull/particle.git",
+  "repository": "https://github.com/luwenxull/force.git",
   "author": "luwenxull <992273307@qq.com>",
   "license": "MIT",
   "devDependencies": {
