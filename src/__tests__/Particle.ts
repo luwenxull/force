@@ -1,5 +1,5 @@
 import { Vector3 } from 'three'
-import { Particle, DRAG, TIME_STEP } from '../Particle'
+import Particle, { DRAG, TIME_STEP } from '../Particle'
 
 test('constructor', () => {
   const p = new Particle()
@@ -7,6 +7,8 @@ test('constructor', () => {
   expect(p.v.toArray()).toEqual([0, 0, 0])
   expect(p.a.toArray()).toEqual([0, 0, 0])
   expect(p.mass).toBe(1)
+  const p1 = new Particle([1, 1, 1])
+  expect(p1.position.toArray()).toEqual([1, 1, 1])
 })
 
 test('addForce', () => {

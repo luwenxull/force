@@ -10,15 +10,22 @@ export interface IParticle {
 export const DRAG = 1 - 0.03
 export const TIME_STEP = 18 / 1000
 
-export class Particle implements IParticle {
+export default class Particle implements IParticle {
+  public position: Vector3
+  public a: Vector3
+  public v: Vector3
   private _a: Vector3 = new Vector3()
   private _v: Vector3 = new Vector3()
   constructor(
-    public position: Vector3 = new Vector3(),
-    public a: Vector3 = new Vector3(),
-    public v: Vector3 = new Vector3(),
+    position: number[] = [0, 0, 0],
+    a: number[] = [0, 0, 0],
+    v: number[] = [0, 0, 0],
     public mass: number = 1,
-  ) {}
+  ) {
+    this.position = new Vector3(...position)
+    this.a = new Vector3(...a)
+    this.v = new Vector3(...v)
+  }
 
   /**
    * 将position，a，v复制到目标对象上
