@@ -5,6 +5,8 @@ export interface IParticle {
   a: Vector3 // 加速度
   v: Vector3 // 速度
   mass: number
+  simulate(): IParticle
+  addForce(force: Vector3): IParticle
 }
 
 export const DRAG = 1 - 0.03
@@ -25,24 +27,6 @@ export default class Particle implements IParticle {
     this.position = new Vector3(...position)
     this.a = new Vector3(...a)
     this.v = new Vector3(...v)
-  }
-
-  /**
-   * 将position，a，v复制到目标对象上
-   *
-   * @param {{
-   *     [prop: string]: any
-   *   }} target
-   * @returns {Particle}
-   * @memberof Particle
-   */
-  public copyTo(target: {
-    [prop: string]: any
-  }): Particle {
-    target.position = this.position
-    target.a = this.a
-    target.v = this.v
-    return this
   }
 
   /**
