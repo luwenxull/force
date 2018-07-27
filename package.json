@@ -1,6 +1,6 @@
 {
   "name": "@luwenxull/force",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "main": "index.js",
   "repository": "https://github.com/luwenxull/force.git",
   "author": "luwenxull <992273307@qq.com>",
@@ -17,7 +17,7 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "tsc --module es2015",
+    "build": "tsc",
     "pub": "npm run build | npm publish --access=public"
   }
 }

@@ -1,3 +1,3 @@
-export { default as Particle } from './lib/Particle'
-export { default as charge } from './lib/charge'
-export { default as link } from './lib/link'
+exports.Particle = require('./lib/Particle').default
+exports.charge = require('./lib/charge').default
+exports.link = require('./lib/link').default
