@@ -1,22 +1,19 @@
 {
   "name": "@luwenxull/force",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "main": "index.js",
   "repository": "https://github.com/luwenxull/force.git",
   "author": "luwenxull <992273307@qq.com>",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^23.3.0",
-    "@types/three": "^0.92.14",
     "jest": "^23.4.1",
     "ts-jest": "^23.0.1",
     "typescript": "^2.9.2"
   },
-  "dependencies": {
-    "three": "^0.94.0"
-  },
+  "dependencies": {},
   "scripts": {
-    "test": "jest",
+    "test": "jest --verbose",
     "build": "tsc",
     "pub": "npm run build | npm publish --access=public"
   }

@@ -1,4 +1,4 @@
-import { Vector3 } from "three";
+import Vector3 from './Vector3'
 
 export interface IParticle {
   position: Vector3 // 位置

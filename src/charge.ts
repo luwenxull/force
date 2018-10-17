@@ -1,4 +1,4 @@
-import { Vector3 } from 'three'
+import Vector3 from './Vector3'
 import IParticle from './Particle'
 const tmp = new Vector3()
 

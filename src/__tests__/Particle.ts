@@ -1,4 +1,4 @@
-import { Vector3 } from 'three'
+import Vector3 from '../Vector3'
 import Particle, { DRAG, TIME_STEP } from '../Particle'
 
 test('constructor', () => {
