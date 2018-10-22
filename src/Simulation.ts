@@ -1,10 +1,13 @@
 import IForce from "./Force/Force";
 import { IParticle } from "./Particle";
+import { uniform3dDistribution } from "./math";
 
 export interface ISimulation {
   particles: IParticle[]
-  addParticles(particles: IParticle[]): ISimulation
+  addParticles(particles: IParticle[], needInit: boolean): ISimulation
   addForce(force: IForce): ISimulation
+  clearParticles(): ISimulation
+  clearForce(): ISimulation
   tick(): void
 }
 
@@ -20,8 +23,22 @@ export default class Simulation implements ISimulation {
    * @returns {this}
    * @memberof Simulation
    */
-  addParticles(particles: IParticle[]): this {
+  addParticles(particles: IParticle[], needInit = true): this {
+    if (needInit) {
+      uniform3dDistribution(particles)
+    }
     this.particles = this.particles.concat(particles)
+    return this
+  }
+
+  /**
+   * 清除粒子
+   *
+   * @returns {this}
+   * @memberof Simulation
+   */
+  clearParticles(): this {
+    this.particles = []
     return this
   }
 
@@ -37,6 +54,23 @@ export default class Simulation implements ISimulation {
     return this
   }
 
+  /**
+   * 清除力模型
+   *
+   * @returns {this}
+   * @memberof Simulation
+   */
+  clearForce(): this {
+    this.forces = []
+    return this
+  }
+
+  /**
+   * 模拟每一帧
+   *
+   * @returns
+   * @memberof Simulation
+   */
   tick() {
     const l = this.particles.length
     for (let i = 0; i < l; i++) {
