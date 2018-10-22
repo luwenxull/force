@@ -9,7 +9,7 @@ import Vector3 from './Vector3'
  * @returns {Array<T>}
  */
 export function uniform3dDistribution<T extends { position: Vector3 }>(nodes: Array<T>): Array<T> {
-  const r = 1
+  const r = 0.1
   let base = 2
   let index = 0
   nodes.forEach(node => {

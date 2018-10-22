@@ -1,40 +1,43 @@
-import Vector3 from './Vector3'
-
+import Vector3, { IVector3, IVectorConstructor } from './Vector3'
+import { ENV } from './env'
 export type ParticleID = string | number
+
+type ThreeItemsArray = [number, number, number]
 
 export interface IParticleOption {
   id: ParticleID
-  position?: number[] // 位置
-  a?: number[] // 加速度
-  v?: number[] // 速度
+  position?: ThreeItemsArray // 位置
+  a?: ThreeItemsArray // 加速度
+  v?: ThreeItemsArray // 速度
   mass?: number
 }
 
 export interface IParticle {
   id: ParticleID
-  position: Vector3 // 位置
-  a: Vector3 // 加速度
-  v: Vector3 // 速度
+  position: IVector3 // 位置
+  a: IVector3 // 加速度
+  v: IVector3 // 速度
   mass: number
   move(): IParticle
-  accelerate(force: Vector3): IParticle
+  accelerate(force: IVector3): IParticle
 }
-
-export const DRAG = 1 - 0.03
-export const TIME_STEP = 18 / 1000
 
 export default class Particle implements IParticle {
   public id: ParticleID
-  public position: Vector3
-  public a: Vector3
-  public v: Vector3
+  public position: IVector3
+  public a: IVector3
+  public v: IVector3
   public mass: number
-  private _a: Vector3 = new Vector3()
-  private _v: Vector3 = new Vector3()
+  private _a: IVector3
+  private _v: IVector3
+  private VectorConstructor: IVectorConstructor
   constructor(
-    option: IParticleOption | ParticleID
+    option: IParticleOption | ParticleID,
+    Vector: IVectorConstructor = Vector3
   ) {
-    const zero = [0, 0, 0]
+    this._a = new Vector(0, 0, 0)
+    this._v = new Vector(0, 0, 0)
+    const zero: ThreeItemsArray = [0, 0, 0]
     if (typeof option === 'object') {
       const {
         id,
@@ -44,18 +47,18 @@ export default class Particle implements IParticle {
         mass = 1
       } = option
       this.id = id
-      this.position = new Vector3(...position)
-      this.a = new Vector3(...a)
-      this.v = new Vector3(...v)
+      this.position = new Vector(...position)
+      this.a = new Vector(...a)
+      this.v = new Vector(...v)
       this.mass = mass
     } else {
       this.id = option
-      this.position = new Vector3(...zero)
-      this.a = new Vector3(...zero)
-      this.v = new Vector3(...zero)
+      this.position = new Vector(...zero)
+      this.a = new Vector(...zero)
+      this.v = new Vector(...zero)
       this.mass = 1
     }
-
+    this.VectorConstructor = Vector
   }
 
   /**
@@ -66,10 +69,10 @@ export default class Particle implements IParticle {
    */
   public move(): Particle {
     this.v
-      .multiplyScalar(DRAG) // 阻力
-      .add(this._a.copy(this.a).multiplyScalar(TIME_STEP)) // 更新速度
+      .multiplyScalar(ENV.DRAG) // 阻力
+      .add(this._a.copy(this.a).multiplyScalar(ENV.TIME_STEP)) // 更新速度
     this.position
-      .add(this._v.copy(this.v).multiplyScalar(TIME_STEP))
+      .add(this._v.copy(this.v).multiplyScalar(ENV.TIME_STEP))
     this.a.set(0, 0, 0) // 加速度归零
     return this
   }
@@ -78,12 +81,14 @@ export default class Particle implements IParticle {
    * 施加力
    * 只会改变加速度
    *
-   * @param {Vector3} force
+   * @param {IVector3} force
    * @returns {Particle}
    * @memberof Particle
    */
-  public accelerate(force: Vector3): Particle {
-    this.a.add(new Vector3().copy(force.multiplyScalar(1 / this.mass)))
+  public accelerate(force: IVector3): Particle {
+    this.a.add(
+      new this.VectorConstructor(0, 0, 0).copy(force.multiplyScalar(1 / this.mass))
+    )
     return this
   }
 }

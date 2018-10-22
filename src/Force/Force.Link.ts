@@ -2,30 +2,18 @@ import IForce from "./Force";
 import { IParticle, ParticleID } from "../Particle";
 import Vector3 from "../Vector3";
 
-export default class Link implements IForce {
-  public links: {
-    [prop: string]: ParticleID[]
-  } = {}
-  public linkMap: {
-    [prop: string]: {
-      [prop: string]: 1
-    }
-  } = {}
+type Links = Array<[ParticleID, ParticleID[]]>
+
+export default class ForceLink implements IForce {
+  public links: Links = []
+  public linkMap: Map<ParticleID, Set<ParticleID>> = new Map()
   constructor(public strength: number, public expectDistance: number) { }
 
-  setLinks(links: {
-    [prop: string]: ParticleID[]
-  }): this {
+  setLinks(links: Links): this {
     this.links = links
-    const ids = Object.keys(links)
-    ids.forEach(id => {
-      const map: {
-        [prop: string]: 1
-      } = this.linkMap[id] = {}
-      for (let targetid of this.links[id]) {
-        map[targetid] = 1
-      }
-    })
+    for (const [source, targets] of links) {
+      this.linkMap.set(source, new Set(targets))
+    }
     return this
   }
 
@@ -40,8 +28,8 @@ export default class Link implements IForce {
   isRelated(p1: IParticle, p2: IParticle): boolean {
     const id1 = p1.id, id2 = p2.id
     if (
-      this.linkMap[id1] && this.linkMap[id1][id2] ||
-      this.linkMap[id2] && this.linkMap[id2][id1]
+      this.linkMap.has(id1) && (this.linkMap.get(id1) as Set<ParticleID>).has(id2) ||
+      this.linkMap.has(id2) && (this.linkMap.get(id2) as Set<ParticleID>).has(id1)
     ) {
       return true
     }

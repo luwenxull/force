@@ -1,6 +1,8 @@
 import Vector3 from '../Vector3'
-import Particle, { DRAG, TIME_STEP } from '../Particle'
+import Particle from '../Particle'
+import { ENV } from '../env'
 
+const { DRAG, TIME_STEP } = ENV
 test('constructor', () => {
   const p = new Particle({ id: 1 })
   expect(p.position.toArray()).toEqual([0, 0, 0])
