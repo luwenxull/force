@@ -14,7 +14,24 @@ test('addforce', () => {
   expect(s.forces.length).toBe(1)
 })
 
-test('tick', () => {
+test('stopAt', () => {
+  const s = new Simulation()
+  const fn = jest.fn(() => {})
+  const stopCb = jest.fn(() => {})
+  s.evolve(fn)
+  expect(fn.mock.calls.length).toBe(0)
+
+  s.stopAt(1, stopCb)
+  fn.mockClear()
+  s.evolve(fn)
+  expect(fn.mock.calls.length).toBe(1)
+  expect(stopCb.mock.calls.length).toBe(1)
+  s.evolve(fn)
+  expect(fn.mock.calls.length).toBe(1)
+  expect(stopCb.mock.calls.length).toBe(1)
+})
+
+test('evolve.iterationCount', () => {
   const s = new Simulation().addParticles([
     new Particle({ id: 1, position: [1, 0, 0] }),
     new Particle(2),
@@ -24,6 +41,7 @@ test('tick', () => {
   const mock = jest.fn(() => { })
   f.applyTo = mock
   s.addForce(f)
-  s.tick()
+  s.stopAt(1)
+  s.evolve()
   expect(mock.mock.calls.length).toBe(3)
 })

@@ -14,9 +14,9 @@ export interface IVector3 {
 }
 
 export type IVectorConstructor = new (
-  x: number,
-  y: number,
-  z: number
+  x?: number,
+  y?: number,
+  z?: number
 ) => IVector3
 
 export default class Vector3 implements IVector3 {
