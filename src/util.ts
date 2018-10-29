@@ -29,3 +29,24 @@ export function uniform3dDistribution<T extends { position: Vector3 }>(nodes: Ar
   })
   return nodes
 }
+
+/**
+ * safe get for map
+ * map对象的包装get方法
+ *
+ * @export
+ * @template K
+ * @template U
+ * @param {Map<K, U>} map
+ * @param {K} key
+ * @param {U} dft
+ * @returns {U}
+ */
+export function getOrOverwrite<K, U>(map: Map<K, U>, key: K, dft: U): U {
+  if (map.has(key)) {
+    return map.get(key) as U
+  } else {
+    map.set(key, dft)
+    return dft
+  }
+}

@@ -1,6 +1,7 @@
 import IForce from "./Force";
 import { IParticle, ParticleID } from "../Particle";
 import Vector3 from "../Vector3";
+import { getOrOverwrite } from "../util";
 
 type Links = Array<[ParticleID, ParticleID[]]>
 
@@ -12,7 +13,11 @@ export default class ForceLink implements IForce {
   setLinks(links: Links): this {
     this.links = links
     for (const [source, targets] of links) {
-      this.linkMap.set(source, new Set(targets))
+      const sets = getOrOverwrite(this.linkMap, source, new Set())
+      for(let target of targets) {
+        sets.add(target)
+        getOrOverwrite(this.linkMap, target, new Set()).add(source)
+      }
     }
     return this
   }
@@ -28,8 +33,7 @@ export default class ForceLink implements IForce {
   isRelated(p1: IParticle, p2: IParticle): boolean {
     const id1 = p1.id, id2 = p2.id
     if (
-      this.linkMap.has(id1) && (this.linkMap.get(id1) as Set<ParticleID>).has(id2) ||
-      this.linkMap.has(id2) && (this.linkMap.get(id2) as Set<ParticleID>).has(id1)
+      this.linkMap.has(id1) && (this.linkMap.get(id1) as Set<ParticleID>).has(id2)
     ) {
       return true
     }

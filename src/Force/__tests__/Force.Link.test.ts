@@ -9,6 +9,7 @@ test('set links', () => {
   expect(f.links.length).toBe(1)
   expect(f.links[0][1]).toEqual([2, 3])
   expect(f.linkMap.get(1).has(2)).toBeTruthy()
+  expect(f.linkMap.get(2).has(1)).toBeTruthy()
 })
 
 test('is related', () => {

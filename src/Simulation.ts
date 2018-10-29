@@ -1,6 +1,6 @@
 import IForce from "./Force/Force";
 import { IParticle } from "./Particle";
-import { uniform3dDistribution } from "./math";
+import { uniform3dDistribution } from "./util";
 
 export interface ISimulation {
   particles: IParticle[]
