@@ -20,6 +20,8 @@ export interface IParticle {
   mass: number
   move(): IParticle
   accelerate(force: IVector3): IParticle
+  userData<T>(data: T): IParticle
+  userData(): any
 }
 
 export default class Particle implements IParticle {
@@ -30,6 +32,7 @@ export default class Particle implements IParticle {
   public mass: number
   private _a: IVector3
   private _v: IVector3
+  private _userData: any
   private VectorConstructor: IVectorConstructor
   constructor(
     option: IParticleOption | ParticleID,
@@ -90,5 +93,14 @@ export default class Particle implements IParticle {
       new this.VectorConstructor(0, 0, 0).copy(force.multiplyScalar(1 / this.mass))
     )
     return this
+  }
+
+  public userData<T>(data?: T): T | this {
+    if (data !== undefined) {
+      this._userData = data
+      return this
+    } else {
+      return this._userData
+    }
   }
 }

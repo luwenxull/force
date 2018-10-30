@@ -18,9 +18,9 @@ test('is related', () => {
   f.setLinks([
     [1, [2, 3]]
   ])
-  expect(f.isRelated(p1, p2)).toBeTruthy()
-  expect(f.isRelated(p2, p1)).toBeTruthy()
-  expect(f.isRelated(p1, new Particle(4))).toBeFalsy()
+  expect(f.isRelated(p1.id, p2.id)).toBeTruthy()
+  expect(f.isRelated(p2.id, p1.id)).toBeTruthy()
+  expect(f.isRelated(p1.id, new Particle(4).id)).toBeFalsy()
 })
 
 test('apply to', () => {

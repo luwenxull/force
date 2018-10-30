@@ -1,5 +1,5 @@
 import IForce from "./Force";
-import { IParticle, ParticleID } from "../Particle";
+import Particle, { IParticle, ParticleID } from "../Particle";
 import Vector3 from "../Vector3";
 import { getOrOverwrite } from "../util";
 
@@ -25,13 +25,13 @@ export default class ForceLink implements IForce {
   /**
    *
    * 判断两个粒子是否相关联
-   * @param {IParticle} p1
-   * @param {IParticle} p2
+   *
+   * @param {ParticleID} id1
+   * @param {ParticleID} id2
    * @returns {boolean}
-   * @memberof Link
+   * @memberof ForceLink
    */
-  isRelated(p1: IParticle, p2: IParticle): boolean {
-    const id1 = p1.id, id2 = p2.id
+  isRelated(id1: ParticleID, id2: ParticleID): boolean {
     if (
       this.linkMap.has(id1) && (this.linkMap.get(id1) as Set<ParticleID>).has(id2)
     ) {
@@ -40,8 +40,24 @@ export default class ForceLink implements IForce {
     return false
   }
 
+  
+  /**
+   * 找到有连接关系的节点
+   *
+   * @param {ParticleID} id
+   * @returns {ParticleID[]}
+   * @memberof ForceLink
+   */
+  findRelated(id: ParticleID): ParticleID[] {
+    if (this.linkMap.has(id)) {
+      return Array.from(this.linkMap.get(id) as Set<ParticleID>)
+    } else {
+      return []
+    }
+  }
+
   applyTo(p1: IParticle, p2: IParticle) {
-    if (this.isRelated(p1, p2)) {
+    if (this.isRelated(p1.id, p2.id)) {
       const distance = p1.position.distanceTo(p2.position)
       const strength = this.strength * (distance - this.expectDistance)
       const tmp = new Vector3()
