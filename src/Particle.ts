@@ -95,7 +95,9 @@ export default class Particle implements IParticle {
     return this
   }
 
-  public userData<T>(data?: T): T | this {
+  public userData(): any
+  public userData<T>(data: T): this
+  public userData(data?: any): any | this {
     if (data !== undefined) {
       this._userData = data
       return this

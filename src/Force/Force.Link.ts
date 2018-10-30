@@ -3,7 +3,7 @@ import Particle, { IParticle, ParticleID } from "../Particle";
 import Vector3 from "../Vector3";
 import { getOrOverwrite } from "../util";
 
-type Links = Array<[ParticleID, ParticleID[]]>
+export type Links = Array<[ParticleID, ParticleID[]]>
 
 export default class ForceLink implements IForce {
   public links: Links = []

@@ -1,3 +1,3 @@
 export { default as Force } from './Force'
-export { default as Charge } from './Force.Charge'
-export { default as Link } from './Force.Link'
+export { default as ForceCharge } from './Force.Charge'
+export { default as ForceLink } from './Force.Link'
