@@ -17,7 +17,7 @@ export interface IParticle {
     move(): IParticle;
     accelerate(force: IVector3): IParticle;
     userData<T>(data: T): IParticle;
-    userData(): any;
+    userData<T>(): T;
 }
 export default class Particle implements IParticle {
     id: ParticleID;
@@ -46,7 +46,7 @@ export default class Particle implements IParticle {
      * @memberof Particle
      */
     accelerate(force: IVector3): Particle;
-    userData(): any;
+    userData<T>(): T;
     userData<T>(data: T): this;
 }
 export {};

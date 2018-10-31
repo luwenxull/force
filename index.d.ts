@@ -1,5 +1,0 @@
-export { default as Simulation, ISimulation} from './lib/Simulation'
-export { default as Particle, IParticle } from './lib/Particle'
-export { default as Vector3, IVector3 } from './lib/Vector3'
-export * from './lib/Force'
-export * from './lib/env'

@@ -21,7 +21,7 @@ export interface IParticle {
   move(): IParticle
   accelerate(force: IVector3): IParticle
   userData<T>(data: T): IParticle
-  userData(): any
+  userData<T>(): T
 }
 
 export default class Particle implements IParticle {
@@ -95,7 +95,7 @@ export default class Particle implements IParticle {
     return this
   }
 
-  public userData(): any
+  public userData<T>(): T
   public userData<T>(data: T): this
   public userData(data?: any): any | this {
     if (data !== undefined) {
