@@ -1,6 +1,6 @@
 {
   "name": "@luwenxull/force",
-  "version": "2.0.7",
+  "version": "2.1.1",
   "main": "lib/index.js",
   "repository": "https://github.com/luwenxull/force.git",
   "author": "luwenxull <992273307@qq.com>",
@@ -8,6 +8,7 @@
   "devDependencies": {
     "@types/jest": "^23.3.0",
     "jest": "^23.4.1",
+    "prettier": "1.15.1",
     "ts-jest": "^23.0.1",
     "ts-node": "^7.0.1",
     "typescript": "^2.9.2"
@@ -16,6 +17,7 @@
   "scripts": {
     "test": "jest --verbose",
     "build": "tsc",
-    "pub": "npm run build | npm publish --access=public"
+    "prettier": "prettier --write ./src/**/*.ts ./lib/**/*.js ./lib/**/*.d.ts",
+    "pub": "npm publish --access=public"
   }
 }

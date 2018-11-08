@@ -1,6 +1,5 @@
 export interface IEnv {
-    DRAG: number;
-    TIME_STEP: number;
+  DRAG: number;
+  TIME_STEP: number;
 }
-export declare const ENV: IEnv;
-export declare function def(option: Partial<IEnv>): void;
+export default function(option?: Partial<IEnv>): IEnv;

@@ -1,13 +1,13 @@
 export interface IEnv {
-  DRAG: number
-  TIME_STEP: number
+  DRAG: number;
+  TIME_STEP: number;
 }
 
-export const ENV: IEnv = {
+const DEFAULT_ENV: IEnv = {
   DRAG: 0.97,
-  TIME_STEP: 0.018,
-}
+  TIME_STEP: 0.018
+};
 
-export function def(option: Partial<IEnv>): void {
-  Object.assign(ENV, option)
+export default function(option: Partial<IEnv> = {}): IEnv {
+  return Object.assign({}, DEFAULT_ENV, option);
 }

@@ -7,9 +7,11 @@ import Vector3 from './Vector3';
  * @param {Array<T>} nodes
  * @returns {Array<T>}
  */
-export declare function uniform3dDistribution<T extends {
+export declare function uniform3dDistribution<
+  T extends {
     position: Vector3;
-}>(nodes: Array<T>): Array<T>;
+  }
+>(nodes: Array<T>): Array<T>;
 /**
  * safe get for map
  * map对象的包装get方法

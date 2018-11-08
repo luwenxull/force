@@ -1,39 +1,44 @@
-import IForce from "./Force/Force";
-import { IParticle } from "./Particle";
-import { uniform3dDistribution } from "./util";
+import Force from './Force/Force';
+import { IParticle } from './Particle';
+import { uniform3dDistribution } from './util';
+import env, { IEnv } from './env';
 
 export interface ISimulation {
-  particles: IParticle[]
-  addParticles(particles: IParticle[], needInit: boolean): ISimulation
-  addForce(force: IForce): ISimulation
-  clearParticles(): ISimulation
-  clearForce(): ISimulation
-  evolve(cb?: () => void): ISimulation
-  stopAt(count: number, cb?: () => void): ISimulation
+  ENV: IEnv;
+  particles: IParticle[];
+  forces: Force[];
+  addParticles(particles: IParticle[], needInit: boolean): ISimulation;
+  addForce(force: Force): ISimulation;
+  clearParticles(): ISimulation;
+  clearForce(): ISimulation;
+  addEnv(env: IEnv): ISimulation;
+  evolve(cb?: () => void): ISimulation;
+  stopAt(count: number, cb?: () => void): ISimulation;
 }
 
 export default class Simulation implements ISimulation {
-  public particles: IParticle[] = []
-  public forces: IForce[] = []
-  private _stop: number = 0
-  private _count: number = 0
-  private _stop_callback: (() => void) | null = null
-  constructor() {
-  }
+  public ENV: IEnv = env();
+  public particles: IParticle[] = [];
+  public forces: Force[] = [];
+  private _stop: number = 0;
+  private _count: number = 0;
+  private _stop_callback: (() => void) | null = null;
+  constructor() {}
 
   /**
    * 添加粒子
    *
    * @param {IParticle[]} particles
+   * @param {boolean} [autoPosition=true]
    * @returns {this}
    * @memberof Simulation
    */
-  addParticles(particles: IParticle[], needInit = true): this {
-    if (needInit) {
-      uniform3dDistribution(particles)
+  addParticles(particles: IParticle[], autoPosition = true): this {
+    if (autoPosition) {
+      uniform3dDistribution(particles);
     }
-    this.particles = this.particles.concat(particles)
-    return this
+    this.particles = this.particles.concat(particles);
+    return this;
   }
 
   /**
@@ -43,20 +48,20 @@ export default class Simulation implements ISimulation {
    * @memberof Simulation
    */
   clearParticles(): this {
-    this.particles = []
-    return this
+    this.particles = [];
+    return this;
   }
 
   /**
    * 添加力模型
    *
-   * @param {IForce} force
+   * @param {Force} force
    * @returns {this}
    * @memberof Simulation
    */
-  addForce(force: IForce): this {
-    this.forces.push(force)
-    return this
+  addForce(force: Force): this {
+    this.forces.push(force);
+    return this;
   }
 
   /**
@@ -66,8 +71,8 @@ export default class Simulation implements ISimulation {
    * @memberof Simulation
    */
   clearForce(): this {
-    this.forces = []
-    return this
+    this.forces = [];
+    return this;
   }
 
   /**
@@ -79,30 +84,29 @@ export default class Simulation implements ISimulation {
    */
   evolve(cb?: () => void): this {
     if (this._count < this._stop) {
-      this._count ++
-      const l = this.particles.length
+      this._count++;
+      const l = this.particles.length;
       for (let i = 0; i < l; i++) {
-        const p1 = this.particles[i]
+        const p1 = this.particles[i];
         for (let j = i + 1; j < l; j++) {
-          const p2 = this.particles[j]
+          const p2 = this.particles[j];
           for (let force of this.forces) {
-            force.applyTo(p1, p2)
+            force.applyTo(p1, p2);
           }
         }
       }
       for (let p of this.particles) {
-        p.move()
+        p.move(this.ENV);
       }
       if (cb) {
-        cb()
+        cb();
       }
       if (this._count === this._stop && this._stop_callback) {
-        this._stop_callback()
+        this._stop_callback();
       }
     }
-    return this
+    return this;
   }
-
 
   /**
    * 设置最大迭代次数
@@ -113,8 +117,20 @@ export default class Simulation implements ISimulation {
    * @memberof Simulation
    */
   stopAt(count: number, cb?: () => void): this {
-    this._stop = count
-    cb && (this._stop_callback = cb)
-    return this
+    this._stop = count;
+    cb && (this._stop_callback = cb);
+    return this;
+  }
+
+  /**
+   * 配置环境
+   *
+   * @param {IEnv} env
+   * @returns {this}
+   * @memberof Simulation
+   */
+  addEnv(env: IEnv): this {
+    this.ENV = env;
+    return this;
   }
 }
